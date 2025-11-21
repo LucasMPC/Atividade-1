@@ -72,8 +72,68 @@ public class ProdutosDAO {
 
         return listagem;
     }
-
     
+    public void venderProduto(int id) {
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+
+        try {
+            conn = new conectaDAO().connectDB();
+            prep = conn.prepareStatement(sql);
+
+            prep.setInt(1, id);
+            prep.execute();
+            prep.close();
+
+            JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao vender produto: " + e);
+        }
+    }
+
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        ArrayList<ProdutosDTO> vendidos = new ArrayList<>();
+
+        try {
+            conn = new conectaDAO().connectDB();
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+
+                vendidos.add(produto);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar produtos vendidos: " + e);
+        }
+
+        return vendidos;
+    }
+    
+    public void desfazerVenda(int id) {
+        String sql = "UPDATE produtos SET status = 'A Venda' WHERE id = ?";
+        try {
+            conn = new conectaDAO().connectDB();
+            prep = conn.prepareStatement(sql);
+            prep.setInt(1, id);
+            int linhas = prep.executeUpdate();
+            prep.close();
+
+            if (linhas > 0) {
+                JOptionPane.showMessageDialog(null, "Venda desfeita com sucesso (produto disponível novamente)!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao desfazer venda: " + e);
+        }
+    }
     
     
         
