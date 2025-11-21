@@ -20,6 +20,10 @@ public class vendasVIEW extends javax.swing.JFrame {
     public vendasVIEW() {
         initComponents();
         setLocationRelativeTo(null);
+        
+        carregarClientes();
+        carregarProdutosVendidos();
+        
         carregarClientes();
         carregarProdutosVendidos();
     }
@@ -304,9 +308,9 @@ public class vendasVIEW extends javax.swing.JFrame {
         int id = (int) jTable1.getValueAt(linha, 0);
 
         ProdutosDAO dao = new ProdutosDAO();
-        dao.venderProduto(id);  // aqui você pode criar um excluirProduto se quiser
-
+        dao.desfazerVenda(id);
         listarVendas();
+        carregarProdutosVendidos();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void txtIdVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdVendaActionPerformed

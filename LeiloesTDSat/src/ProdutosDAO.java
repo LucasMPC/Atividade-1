@@ -115,7 +115,25 @@ public class ProdutosDAO {
 
         return vendidos;
     }
+    
+    public void desfazerVenda(int id) {
+        String sql = "UPDATE produtos SET status = 'A Venda' WHERE id = ?";
+        try {
+            conn = new conectaDAO().connectDB();
+            prep = conn.prepareStatement(sql);
+            prep.setInt(1, id);
+            int linhas = prep.executeUpdate();
+            prep.close();
 
+            if (linhas > 0) {
+                JOptionPane.showMessageDialog(null, "Venda desfeita com sucesso (produto disponível novamente)!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao desfazer venda: " + e);
+        }
+    }
     
     
         
